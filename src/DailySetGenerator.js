@@ -41,6 +41,22 @@ function isSet (c1, c2, c3) {
     return true;
 }
 
+function mapCombinations(fn, array, combinationLength) {
+    var combination = array.slice(0, combinationLength);
+
+    var combine = function(count, start) {
+        if(0 == count) { fn(combination); };
+
+        for (i = start; i < array.length; i++) {
+            var j = count - 1;
+            combination[j] = array[i];
+            combine(j, i+1);
+        };
+    };
+
+    combine(combinationLength, 0);
+}
+
 /* How many sets in a puzzle? */
 function SetCountInPuzzle (puzzle, subSetIndex) {
     // base case
