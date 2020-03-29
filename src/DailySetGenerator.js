@@ -54,7 +54,7 @@ function mapCombinations(fn, array, combinationLength) {
         };
     };
 
-    combine(combinationLength, 0);
+    return combine(combinationLength, 0);
 }
 
 /* How many sets in a puzzle? */
