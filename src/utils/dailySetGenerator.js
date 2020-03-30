@@ -93,7 +93,6 @@ export function generateSetPuzzle(puzzleSize, desiredSetCount) {
   let currentSetCount = setCountInPuzzle(cards);
   let newCard;
   let horizon = [];
-  let numberOfTransitions = 0;
 
   /* Is card unique within the current set of card? (Duplicates not
    * allowed) */
@@ -146,13 +145,13 @@ export function generateSetPuzzle(puzzleSize, desiredSetCount) {
       const setCountDifference =
         (setCountInState - currentSetCount) * overOrUnderDesired;
 
-      if (0 < setCountDifference) {
+      if (setCountDifference > 0) {
         higherUtilityStates.push(hypothetical);
       }
     }
 
     // Pick one at random.
-    if (0 < higherUtilityStates.length) {
+    if (higherUtilityStates.length > 0) {
       cards =
         higherUtilityStates[
           Math.floor(Math.random() * higherUtilityStates.length)
@@ -160,14 +159,12 @@ export function generateSetPuzzle(puzzleSize, desiredSetCount) {
     }
 
     currentSetCount = setCountInPuzzle(cards);
-    numberOfTransitions += 1;
   };
 
   /* Loop until done */
   for (let i = 0; i < 1000; i += 1) {
     // Done?
     if (currentSetCount === desiredSetCount) {
-      // console.log("Number of transitions: %s.", numberOfTransitions);
       return cards;
     }
 
