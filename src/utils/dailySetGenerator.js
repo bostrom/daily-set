@@ -99,8 +99,84 @@ export function solveSetPuzzle(puzzle) {
   return sets;
 }
 
+/* Is card unique within the current set of cards? (Duplicates not
+ * allowed) */
+export function isCardUnique(card, cards) {
+  for (let i = 0; i < cards.length; i += 1) {
+    if (cardsEqual(card, cards[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/* Generate a new, random, unique card. */
+export function pickNewCard(currentCards) {
+  let unique = false;
+  let newCard;
+  do {
+    newCard = generateRandomCard();
+    unique = isCardUnique(newCard, currentCards);
+  } while (!unique);
+
+  return newCard;
+}
+
+/* Create a set of puzzles (horizon) that include the new card */
+export function expandHorizon(newCard, cards) {
+  const horizon = [];
+
+  for (let i = 0; i < cards.length; i += 1) {
+    const hypothetical = cards.slice();
+    hypothetical[i] = newCard;
+    horizon.push(hypothetical);
+  }
+  return horizon;
+}
+
+/* Out of the puzzles on the horizon, pick one that brings us
+ * closer to the desired amount of sets. */
+export function pickNewState(horizon, cards, currentSetCount, desiredSetCount) {
+  const higherUtilityStates = [];
+  let newCards = cards.slice();
+  let newSetCount;
+
+  // Find better states.
+  for (let i = 0; i < horizon.length; i += 1) {
+    const hypothetical = horizon[i];
+    const setCountInState = setCountInPuzzle(hypothetical);
+    let overOrUnderDesired;
+
+    if (currentSetCount < desiredSetCount) {
+      overOrUnderDesired = 1;
+    } else {
+      overOrUnderDesired = -1;
+    }
+
+    const setCountDifference =
+      (setCountInState - currentSetCount) * overOrUnderDesired;
+
+    if (setCountDifference > 0) {
+      higherUtilityStates.push(hypothetical);
+    }
+  }
+
+  // Pick one at random.
+  if (higherUtilityStates.length > 0) {
+    newCards =
+      higherUtilityStates[
+        Math.floor(Math.random() * higherUtilityStates.length)
+      ];
+  }
+
+  newSetCount = setCountInPuzzle(newCards);
+
+  return { newCards: newCards, newSetCount: newSetCount };
+}
+
 /* Generate a set of size puzzleSize with desiredSetCount sets */
 export function generateSetPuzzle(puzzleSize, desiredSetCount) {
+  // Start with a random set of cards
   let cards = [];
   for (let i = 0; i < puzzleSize; i += 1) {
     cards.push(generateRandomCard());
@@ -110,73 +186,6 @@ export function generateSetPuzzle(puzzleSize, desiredSetCount) {
   let newCard;
   let horizon = [];
 
-  /* Is card unique within the current set of card? (Duplicates not
-   * allowed) */
-  const isCardUnique = card => {
-    for (let i = 0; i < cards.length; i += 1) {
-      if (cardsEqual(card, cards[i])) {
-        return false;
-      }
-    }
-    return true;
-  };
-
-  /* Generate a new, random, unique card. */
-  const pickNewCard = () => {
-    let unique = false;
-    do {
-      newCard = generateRandomCard();
-      unique = isCardUnique(newCard);
-    } while (!unique);
-  };
-
-  /* Create a set of puzzles (horizon) that include the new card */
-  const expandHorizon = () => {
-    horizon = [];
-
-    for (let i = 0; i < cards.length; i += 1) {
-      const hypothetical = cards.slice();
-      hypothetical[i] = newCard;
-      horizon.push(hypothetical);
-    }
-  };
-
-  /* Out of the puzzles on the horizon, pick one that brings us
-   * closer to the desired amount of sets. */
-  const pickNewState = () => {
-    const higherUtilityStates = [];
-
-    // Find better states.
-    for (let i = 0; i < horizon.length; i += 1) {
-      const hypothetical = horizon[i];
-      const setCountInState = setCountInPuzzle(hypothetical);
-      let overOrUnderDesired;
-
-      if (currentSetCount < desiredSetCount) {
-        overOrUnderDesired = 1;
-      } else {
-        overOrUnderDesired = -1;
-      }
-
-      const setCountDifference =
-        (setCountInState - currentSetCount) * overOrUnderDesired;
-
-      if (setCountDifference > 0) {
-        higherUtilityStates.push(hypothetical);
-      }
-    }
-
-    // Pick one at random.
-    if (higherUtilityStates.length > 0) {
-      cards =
-        higherUtilityStates[
-          Math.floor(Math.random() * higherUtilityStates.length)
-        ];
-    }
-
-    currentSetCount = setCountInPuzzle(cards);
-  };
-
   /* Loop until done */
   for (let i = 0; i < 1000; i += 1) {
     // Done?
@@ -184,9 +193,14 @@ export function generateSetPuzzle(puzzleSize, desiredSetCount) {
       return cards;
     }
 
-    pickNewCard();
-    expandHorizon();
-    pickNewState();
+    newCard = pickNewCard(cards);
+    horizon = expandHorizon(newCard, cards);
+    ({ newCards: cards, newSetCount: currentSetCount } = pickNewState(
+      horizon,
+      cards,
+      currentSetCount,
+      desiredSetCount,
+    ));
   }
 
   throw new Error('Failed to generate puzzle.');
