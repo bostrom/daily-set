@@ -48,16 +48,15 @@ export function mapCombinations(fn, array, combinationLength) {
 
   const combine = (count, start) => {
     if (!count) {
-      return fn(combination.slice().reverse());
+      fn(combination.slice().reverse());
+    } else {
+      for (let i = start; i < array.length; i += 1) {
+        const j = count - 1;
+        combination[j] = array[i];
+        combine(j, i + 1);
+      }
     }
-    for (let i = start; i < array.length; i += 1) {
-      const j = count - 1;
-      combination[j] = array[i];
-      combine(j, i + 1);
-    }
-    return null;
   };
-
   combine(combinationLength, 0);
 }
 
@@ -72,4 +71,110 @@ export function setCountInPuzzle(puzzle) {
 
   mapCombinations(fn, puzzle, 3);
   return setCount;
+}
+
+/* Are card1 and card2 equal */
+export function cardsEqual(card1, card2) {
+  for (let i = 0; i < card1.length; i += 1) {
+    if (!(card1[i] === card2[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/* Generate a set of size puzzleSize with desiredSetCount sets */
+export function generateSetPuzzle(puzzleSize, desiredSetCount) {
+  let cards = [];
+  for (let i = 0; i < puzzleSize; i += 1) {
+    cards.push(generateRandomCard());
+  }
+
+  let currentSetCount = setCountInPuzzle(cards);
+  let newCard;
+  let horizon = [];
+  let numberOfTransitions = 0;
+
+  /* Is card unique within the current set of card? (Duplicates not
+   * allowed) */
+  const isCardUnique = card => {
+    for (let i = 0; i < cards.length; i += 1) {
+      if (cardsEqual(card, cards[i])) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  /* Generate a new, random, unique card. */
+  const pickNewCard = () => {
+    let unique = false;
+    do {
+      newCard = generateRandomCard();
+      unique = isCardUnique(newCard);
+    } while (!unique);
+  };
+
+  /* Create a set of puzzles (horizon) that include the new card */
+  const expandHorizon = () => {
+    horizon = [];
+
+    for (let i = 0; i < cards.length; i += 1) {
+      const hypothetical = cards.slice();
+      hypothetical[i] = newCard;
+      horizon.push(hypothetical);
+    }
+  };
+
+  /* Out of the puzzles on the horizon, pick one that brings us
+   * closer to the desired amount of sets. */
+  const pickNewState = () => {
+    const higherUtilityStates = [];
+
+    // Find better states.
+    for (let i = 0; i < horizon.length; i += 1) {
+      const hypothetical = horizon[i];
+      const setCountInState = setCountInPuzzle(hypothetical);
+      let overOrUnderDesired;
+
+      if (currentSetCount < desiredSetCount) {
+        overOrUnderDesired = 1;
+      } else {
+        overOrUnderDesired = -1;
+      }
+
+      const setCountDifference =
+        (setCountInState - currentSetCount) * overOrUnderDesired;
+
+      if (0 < setCountDifference) {
+        higherUtilityStates.push(hypothetical);
+      }
+    }
+
+    // Pick one at random.
+    if (0 < higherUtilityStates.length) {
+      cards =
+        higherUtilityStates[
+          Math.floor(Math.random() * higherUtilityStates.length)
+        ];
+    }
+
+    currentSetCount = setCountInPuzzle(cards);
+    numberOfTransitions += 1;
+  };
+
+  /* Loop until done */
+  for (let i = 0; i < 1000; i += 1) {
+    // Done?
+    if (currentSetCount === desiredSetCount) {
+      // console.log("Number of transitions: %s.", numberOfTransitions);
+      return cards;
+    }
+
+    pickNewCard();
+    expandHorizon();
+    pickNewState();
+  }
+
+  throw new Error('Failed to generate puzzle.');
 }

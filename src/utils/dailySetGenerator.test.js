@@ -5,6 +5,8 @@ import {
   isSet,
   mapCombinations,
   setCountInPuzzle,
+  cardsEqual,
+  generateSetPuzzle,
 } from './dailySetGenerator';
 
 describe('Daily Set Generator', () => {
@@ -108,6 +110,25 @@ describe('Daily Set Generator', () => {
       ];
       const setCount = setCountInPuzzle(puzzle);
       expect(setCount).toBe(6);
+    });
+  });
+
+  describe('cardsEqual', () => {
+    it('should work', () => {
+      expect(cardsEqual([0, 1, 2, 0], [1, 1, 2, 0])).toBe(false);
+      expect(cardsEqual([0, 1, 2, 0], [0, 1, 2, 0])).toBe(true);
+    });
+  });
+
+  describe('generateSetPuzzle', () => {
+    it('should work', () => {
+      const puzzle = generateSetPuzzle(12, 1);
+      expect(setCountInPuzzle(puzzle)).toBe(1);
+    });
+
+    it('should also work', () => {
+      const puzzle = generateSetPuzzle(12, 6);
+      expect(setCountInPuzzle(puzzle)).toBe(6);
     });
   });
 
