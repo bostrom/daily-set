@@ -7,6 +7,8 @@ import {
   setCountInPuzzle,
   cardsEqual,
   generateSetPuzzle,
+  solveSetPuzzle,
+  generateSetPuzzleWithSolution,
 } from './dailySetGenerator';
 
 describe('Daily Set Generator', () => {
@@ -120,6 +122,30 @@ describe('Daily Set Generator', () => {
     });
   });
 
+  describe('solveSetPuzzle', () => {
+    it('should work', () => {
+      const solution = solveSetPuzzle([
+        [0, 0, 0, 0],
+        [1, 0, 0, 0],
+        [2, 0, 0, 0],
+      ]);
+
+      expect(solution).toStrictEqual([
+        [
+          [0, 0, 0, 0],
+          [1, 0, 0, 0],
+          [2, 0, 0, 0],
+        ],
+      ]);
+    });
+
+    it('should also work', () => {
+      const puzzle = generateSetPuzzle(12, 3);
+      const sets = solveSetPuzzle(puzzle);
+      expect(sets.length).toBe(3);
+    });
+  });
+
   describe('generateSetPuzzle', () => {
     it('should work', () => {
       const puzzle = generateSetPuzzle(12, 1);
@@ -129,6 +155,15 @@ describe('Daily Set Generator', () => {
     it('should also work', () => {
       const puzzle = generateSetPuzzle(12, 6);
       expect(setCountInPuzzle(puzzle)).toBe(6);
+    });
+  });
+
+  describe('generateSetPuzzleWithSolution', () => {
+    it('should work', () => {
+      const puzzle = generateSetPuzzleWithSolution(12, 6);
+      const { cards, sets } = puzzle;
+      expect(cards.length).toBe(12);
+      expect(sets.length).toBe(6);
     });
   });
 

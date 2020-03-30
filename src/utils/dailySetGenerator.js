@@ -83,6 +83,22 @@ export function cardsEqual(card1, card2) {
   return true;
 }
 
+/* Find all the sets in a puzzle */
+export function solveSetPuzzle(puzzle) {
+  const sets = [];
+  mapCombinations(
+    combination => {
+      const [a, b, c] = combination;
+      if (isSet(a, b, c)) {
+        sets.push(combination);
+      }
+    },
+    puzzle,
+    3,
+  );
+  return sets;
+}
+
 /* Generate a set of size puzzleSize with desiredSetCount sets */
 export function generateSetPuzzle(puzzleSize, desiredSetCount) {
   let cards = [];
@@ -174,4 +190,28 @@ export function generateSetPuzzle(puzzleSize, desiredSetCount) {
   }
 
   throw new Error('Failed to generate puzzle.');
+}
+
+/* Generate a puzzle with its solution in the form:
+ *
+ *  {
+ *    cards: [...],
+ *    sets: [[...], ...]
+ *  }
+ */
+
+export function generateSetPuzzleWithSolution(puzzleSize, desiredSetCount) {
+  let puzzle = generateSetPuzzle(puzzleSize, desiredSetCount);
+  let sets = solveSetPuzzle(puzzle);
+
+  // Massage to sorted string json representation.
+  puzzle = puzzle.map(card => card.join(''));
+  puzzle.sort();
+
+  sets = sets.map(set => set.map(card => card.join('')).sort());
+
+  return {
+    cards: puzzle,
+    sets: sets,
+  };
 }
