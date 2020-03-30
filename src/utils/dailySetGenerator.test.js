@@ -47,20 +47,20 @@ describe('Daily Set Generator', () => {
 
   describe('mapCombinations', () => {
     it('should work', () => {
-      let res = [];
+      const res = [];
       mapCombinations(a => res.push(a), [1], 1);
       expect(res.length).toBe(1);
       expect(res).toStrictEqual([[1]]);
     });
 
     it('should also work', () => {
-      let res = [];
+      const res = [];
       mapCombinations(a => res.push(a), [1, 2, 3], 1);
       expect(res).toStrictEqual([[1], [2], [3]]);
     });
 
     it('should work too', () => {
-      let res = [];
+      const res = [];
       mapCombinations(a => res.push(a), [1, 2, 3], 2);
       expect(res).toStrictEqual([
         [1, 2],
@@ -72,27 +72,27 @@ describe('Daily Set Generator', () => {
 
   describe('setCountInPuzzle', () => {
     it('should work', () => {
-      let puzzle = [
+      const puzzle = [
         [1, 0, 0, 0],
         [0, 1, 0, 0],
         [0, 0, 1, 0],
       ];
-      let setCount = setCountInPuzzle(puzzle);
+      const setCount = setCountInPuzzle(puzzle);
       expect(setCount).toBe(0);
     });
 
     it('should also work', () => {
-      let puzzle = [
+      const puzzle = [
         [0, 0, 0, 0],
         [1, 0, 0, 0],
         [2, 0, 0, 0],
       ];
-      let setCount = setCountInPuzzle(puzzle);
+      const setCount = setCountInPuzzle(puzzle);
       expect(setCount).toBe(1);
     });
 
     it('should work too', () => {
-      let puzzle = [
+      const puzzle = [
         [0, 0, 0, 0],
         [0, 0, 0, 1],
         [0, 1, 0, 0],
@@ -106,7 +106,7 @@ describe('Daily Set Generator', () => {
         [2, 1, 1, 2],
         [2, 2, 1, 0],
       ];
-      let setCount = setCountInPuzzle(puzzle);
+      const setCount = setCountInPuzzle(puzzle);
       expect(setCount).toBe(6);
     });
   });

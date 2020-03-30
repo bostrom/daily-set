@@ -55,16 +55,19 @@ export function mapCombinations(fn, array, combinationLength) {
       combination[j] = array[i];
       combine(j, i + 1);
     }
+    return null;
   };
 
-  combine(combinationLength, 0) + 1;
+  combine(combinationLength, 0);
 }
 
 /* How many sets in a puzzle? */
 export function setCountInPuzzle(puzzle) {
   let setCount = 0;
   const fn = combination => {
-    isSet(combination[0], combination[1], combination[2]) && setCount++;
+    if (isSet(combination[0], combination[1], combination[2])) {
+      setCount += 1;
+    }
   };
 
   mapCombinations(fn, puzzle, 3);
