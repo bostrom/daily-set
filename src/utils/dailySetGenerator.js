@@ -31,8 +31,8 @@ export function isSet(c1, c2, c3) {
   for (let i = 0; i < dimensions; i += 1) {
     if (
       !(
-        CardPropertySame(i, c1, c2, c3) ||
-        CardPropertyAllDifferent(i, c1, c2, c3)
+        cardPropertySame(i, c1, c2, c3) ||
+        cardPropertyAllDifferent(i, c1, c2, c3)
       )
     ) {
       return false;
@@ -41,14 +41,15 @@ export function isSet(c1, c2, c3) {
   return true;
 }
 
+/* Apply fn to all combinations of length combinationLength in
+ * array. */
 export function mapCombinations(fn, array, combinationLength) {
   const combination = array.slice(0, combinationLength);
 
   const combine = (count, start) => {
     if (!count) {
-      fn(combination);
+      return fn(combination.slice().reverse());
     }
-
     for (let i = start; i < array.length; i += 1) {
       const j = count - 1;
       combination[j] = array[i];
@@ -56,39 +57,16 @@ export function mapCombinations(fn, array, combinationLength) {
     }
   };
 
-  return combine(combinationLength, 0);
+  combine(combinationLength, 0) + 1;
 }
 
 /* How many sets in a puzzle? */
-export function setCountInPuzzle(puzzle, subSetIndex) {
-  // base case
-  if (subSetIndex === puzzle.length - 3) {
-    if (
-      isSet(
-        puzzle[subSetIndex],
-        puzzle[subSetIndex + 1],
-        puzzle[subSetIndex + 2],
-      )
-    ) {
-      return 1;
-    }
-    return 0;
-  }
+export function setCountInPuzzle(puzzle) {
+  let setCount = 0;
+  const fn = combination => {
+    isSet(combination[0], combination[1], combination[2]) && setCount++;
+  };
 
-  // recursive case
-  const first = puzzle[0];
-  let second;
-  let third;
-  let sets = 0;
-  for (let i = subSetIndex + 1; i < puzzle.length - 3; i += 1) {
-    second = puzzle[i];
-    for (let j = subSetIndex + i; j < puzzle.length - 2; j += 1) {
-      third = puzzle[j];
-      if (isSet(puzzle[first], puzzle[second], puzzle[third])) {
-        sets += 1;
-      }
-    }
-  }
-
-  return sets + SetCountInPuzzle(puzzle, subSetIndex + 1);
+  mapCombinations(fn, puzzle, 3);
+  return setCount;
 }
