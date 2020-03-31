@@ -209,8 +209,8 @@ export function generateSetPuzzle(puzzleSize, desiredSetCount) {
 /* Generate a puzzle with its solution in the form:
  *
  *  {
- *    cards: [...],
- *    sets: [[...], ...]
+ *    cards: ['1212', '1211', ...],
+ *    sets: [['0212', '1212', '2212'], ...]
  *  }
  */
 
