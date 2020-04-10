@@ -2,7 +2,7 @@ import React from 'react';
 import Figure from './Figure';
 
 export default {
-  title: 'Figure - Diamond',
+  title: 'Figure - Oval',
   component: Figure,
 };
 
@@ -21,42 +21,42 @@ const Svg = ({ children }) => (
 
 export const Hollow = () => (
   <Svg>
-    <Figure shape="diamond" type="hollow" />
+    <Figure shape="oval" type="hollow" />
   </Svg>
 );
 
 export const Solid = () => (
   <Svg>
-    <Figure shape="diamond" type="solid" />
+    <Figure shape="oval" type="solid" />
   </Svg>
 );
 
 export const Striped = () => (
   <Svg>
-    <Figure shape="diamond" type="striped" />
+    <Figure shape="oval" type="striped" />
   </Svg>
 );
 
 export const Two = () => (
   <>
     <Svg>
-      <Figure shape="diamond" type="hollow" />
+      <Figure shape="oval" type="hollow" />
     </Svg>
     <Svg>
-      <Figure shape="diamond" type="hollow" />
+      <Figure shape="oval" type="hollow" />
     </Svg>
   </>
 );
 export const Three = () => (
   <>
     <Svg>
-      <Figure shape="diamond" type="hollow" color="green" />
+      <Figure shape="oval" type="hollow" color="green" />
     </Svg>
     <Svg>
-      <Figure shape="diamond" type="solid" color="purple" />
+      <Figure shape="oval" type="solid" color="purple" />
     </Svg>
     <Svg>
-      <Figure shape="diamond" type="striped" color="red" />
+      <Figure shape="oval" type="striped" color="red" />
     </Svg>
   </>
 );
