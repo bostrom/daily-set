@@ -220,7 +220,6 @@ export function generateSetPuzzleWithSolution(puzzleSize, desiredSetCount) {
 
   // Massage to sorted string json representation.
   puzzle = puzzle.map(card => card.join(''));
-  puzzle.sort();
 
   sets = sets.map(set => set.map(card => card.join('')).sort());
 
