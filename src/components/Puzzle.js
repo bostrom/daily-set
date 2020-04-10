@@ -107,7 +107,7 @@ function Puzzle({ puzzle, startTime }) {
               foundSet.map(cardCode => <Card key={cardCode} code={cardCode} />),
             )}
             {new Array((correctSets.length - foundSets.length) * 3)
-              .fill()
+              .fill(null)
               .map((_, i) => (
                 // eslint-disable-next-line
                 <Card key={`slot_${i}`} code="----" />

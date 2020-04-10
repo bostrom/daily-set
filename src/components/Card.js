@@ -42,7 +42,7 @@ function Card({ code, onClick, selected }) {
     <CardWrapper onClick={onClick} selected={selected}>
       {Array.from({ length: (Number(count) || 0) + 1 }, (k, i) => (
         <StyledSvg key={`${code}-${i}`}>
-          {code !== '----' && (
+          {!code.includes('-') && (
             <Path
               shape={shapes[shape]}
               fill={fills[fill]}
