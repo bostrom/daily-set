@@ -3,38 +3,38 @@ import Svg from './Svg';
 import Path from './Path';
 
 export default {
-  title: 'Path - Oval',
+  title: 'Path - Swiggly',
   component: Path,
 };
 
 export const Hollow = () => (
   <Svg>
-    <Path shape="oval" fill="hollow" />
+    <Path shape="swiggly" fill="hollow" />
   </Svg>
 );
 
 export const Solid = () => (
   <Svg>
-    <Path shape="oval" fill="solid" />
+    <Path shape="swiggly" fill="solid" />
   </Svg>
 );
 
 export const Striped = () => (
   <Svg>
-    <Path shape="oval" fill="striped" />
+    <Path shape="swiggly" fill="striped" />
   </Svg>
 );
 
 export const AllWithColors = () => (
   <>
     <Svg>
-      <Path shape="oval" fill="hollow" color="green" />
+      <Path shape="swiggly" fill="hollow" color="green" />
     </Svg>
     <Svg>
-      <Path shape="oval" fill="solid" color="purple" />
+      <Path shape="swiggly" fill="solid" color="purple" />
     </Svg>
     <Svg>
-      <Path shape="oval" fill="striped" color="red" />
+      <Path shape="swiggly" fill="striped" color="red" />
     </Svg>
   </>
 );

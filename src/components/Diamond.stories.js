@@ -1,62 +1,40 @@
 import React from 'react';
-import Figure from './Figure';
+import Svg from './Svg';
+import Path from './Path';
 
 export default {
-  title: 'Figure - Diamond',
-  component: Figure,
+  title: 'Path - Diamond',
+  component: Path,
 };
-
-const Svg = ({ children }) => (
-  <svg
-    version="1.1"
-    xmlns="http://www.w3.org/2000/svg"
-    preserveAspectRatio="xMidYMid meet"
-    viewBox="0 0 50 90"
-    width={50 * 1}
-    height={90 * 1}
-  >
-    {children}
-  </svg>
-);
 
 export const Hollow = () => (
   <Svg>
-    <Figure shape="diamond" type="hollow" />
+    <Path shape="diamond" fill="hollow" />
   </Svg>
 );
 
 export const Solid = () => (
   <Svg>
-    <Figure shape="diamond" type="solid" />
+    <Path shape="diamond" fill="solid" />
   </Svg>
 );
 
 export const Striped = () => (
   <Svg>
-    <Figure shape="diamond" type="striped" />
+    <Path shape="diamond" fill="striped" />
   </Svg>
 );
 
-export const Two = () => (
+export const AllWithColors = () => (
   <>
     <Svg>
-      <Figure shape="diamond" type="hollow" />
+      <Path shape="diamond" fill="hollow" color="green" />
     </Svg>
     <Svg>
-      <Figure shape="diamond" type="hollow" />
-    </Svg>
-  </>
-);
-export const Three = () => (
-  <>
-    <Svg>
-      <Figure shape="diamond" type="hollow" color="green" />
+      <Path shape="diamond" fill="solid" color="purple" />
     </Svg>
     <Svg>
-      <Figure shape="diamond" type="solid" color="purple" />
-    </Svg>
-    <Svg>
-      <Figure shape="diamond" type="striped" color="red" />
+      <Path shape="diamond" fill="striped" color="red" />
     </Svg>
   </>
 );
