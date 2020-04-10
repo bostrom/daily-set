@@ -179,7 +179,7 @@ export function generateSetPuzzle(puzzleSize, desiredSetCount) {
   // Start with a random set of cards
   let cards = [];
   for (let i = 0; i < puzzleSize; i += 1) {
-    cards.push(generateRandomCard());
+    cards.push(pickNewCard(cards));
   }
 
   let currentSetCount = setCountInPuzzle(cards);
