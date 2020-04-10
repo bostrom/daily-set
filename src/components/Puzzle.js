@@ -55,8 +55,9 @@ const Layout = styled.div`
 
 function Puzzle({ puzzle, startTime }) {
   const [selectedCards, setSelectedCards] = useState([]);
-  const [correctSets] = useState(puzzle.sets);
   const [foundSets, setFoundSets] = useState([]);
+
+  const { sets: correctSets, cards } = puzzle;
 
   const selectCard = cardCode => {
     if (selectedCards.indexOf(cardCode) > -1) {
@@ -89,7 +90,7 @@ function Puzzle({ puzzle, startTime }) {
             <PuzzleComplete startTime={startTime} />
           ) : (
             <Grid>
-              {puzzle.cards.map(cardCode => (
+              {cards.map(cardCode => (
                 <Card
                   key={cardCode}
                   code={cardCode}
@@ -107,10 +108,9 @@ function Puzzle({ puzzle, startTime }) {
               foundSet.map(cardCode => <Card key={cardCode} code={cardCode} />),
             )}
             {new Array((correctSets.length - foundSets.length) * 3)
-              .fill(null)
+              .fill()
               .map((_, i) => (
-                // eslint-disable-next-line
-                <Card key={`slot_${i}`} code="----" />
+                <Card key={`slot_${i}`} code="----" /> // eslint-disable-line
               ))}
           </ResultGrid>
         </Result>
