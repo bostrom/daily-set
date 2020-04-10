@@ -26,15 +26,13 @@ const CardWrapper = styled.div`
   width: 100%;
   height: 100%;
   border: 1px solid gray;
+  cursor: pointer;
   ${({ selected }) =>
-    selected &&
-    `
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
-  `}
+    selected && `box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);`}
 `;
 
 const StyledSvg = styled(Svg)`
-  margin: 0.5rem 0;
+  margin: 5% 0;
 `;
 
 function Card({ code, onClick, selected }) {
@@ -42,14 +40,15 @@ function Card({ code, onClick, selected }) {
 
   return (
     <CardWrapper onClick={onClick} selected={selected}>
-      {Array.from({ length: Number(count) + 1 }, (k, i) => (
-        <StyledSvg>
-          <Path
-            key={`${code}-${i}`}
-            shape={shapes[shape]}
-            fill={fills[fill]}
-            color={colors[color]}
-          />
+      {Array.from({ length: (Number(count) || 0) + 1 }, (k, i) => (
+        <StyledSvg key={`${code}-${i}`}>
+          {!code.includes('-') && (
+            <Path
+              shape={shapes[shape]}
+              fill={fills[fill]}
+              color={colors[color]}
+            />
+          )}
         </StyledSvg>
       ))}
     </CardWrapper>

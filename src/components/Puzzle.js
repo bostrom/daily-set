@@ -20,6 +20,11 @@ const ResultGrid = styled(Grid)`
   grid-column-gap: 5px;
   grid-row-gap: 5px;
   max-width: 180px;
+
+  svg {
+    height: 1.5rem;
+    width: auto;
+  }
 `;
 
 const Result = styled.div``;
@@ -101,6 +106,12 @@ function Puzzle({ puzzle, startTime }) {
             {foundSets.map(foundSet =>
               foundSet.map(cardCode => <Card key={cardCode} code={cardCode} />),
             )}
+            {new Array((correctSets.length - foundSets.length) * 3)
+              .fill(null)
+              .map((_, i) => (
+                // eslint-disable-next-line
+                <Card key={`slot_${i}`} code="----" />
+              ))}
           </ResultGrid>
         </Result>
       </Layout>
