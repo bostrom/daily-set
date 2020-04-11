@@ -1,31 +1,10 @@
 import React, { useState } from 'react';
 import { arrayOf, string, shape } from 'prop-types';
 import styled from 'styled-components';
+import moment from 'moment';
 import Card from './Card';
+import { Grid, ResultGrid } from './Grid';
 import PuzzleComplete from './PuzzleComplete';
-
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  grid-column-gap: 15px;
-  grid-row-gap: 15px;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 800px;
-`;
-
-const ResultGrid = styled(Grid)`
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  grid-column-gap: 5px;
-  grid-row-gap: 5px;
-  max-width: 180px;
-
-  svg {
-    height: 1.5rem;
-    width: auto;
-  }
-`;
 
 const Result = styled.div``;
 const Game = styled.div``;
@@ -56,6 +35,7 @@ const Layout = styled.div`
 function Puzzle({ puzzle, startTime }) {
   const [selectedCards, setSelectedCards] = useState([]);
   const [foundSets, setFoundSets] = useState([]);
+  const [individualSetTimes, setIndividualSetTimes] = useState([]);
 
   const { sets: correctSets, cards } = puzzle;
 
@@ -75,6 +55,7 @@ function Puzzle({ puzzle, startTime }) {
       !foundSets.find(set => set.sort().join() === selectedCards.sort().join())
     ) {
       setFoundSets([...foundSets, selectedCards]);
+      setIndividualSetTimes([...individualSetTimes, moment()]);
       // setMessage('You found a set!');
     } else {
       // setMessage('Not a set');
@@ -87,7 +68,10 @@ function Puzzle({ puzzle, startTime }) {
       <Layout>
         <Game>
           {foundSets.length === 6 ? (
-            <PuzzleComplete startTime={startTime} />
+            <PuzzleComplete
+              startTime={startTime}
+              individualSetTimes={individualSetTimes}
+            />
           ) : (
             <Grid>
               {cards.map(cardCode => (
