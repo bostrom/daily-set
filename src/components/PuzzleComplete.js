@@ -2,6 +2,7 @@ import React from 'react';
 import { arrayOf, shape } from 'prop-types';
 import { stripIndents, oneLineTrim } from 'common-tags';
 import moment from 'moment';
+import durationFormat from 'moment-duration-format';
 import styled from 'styled-components';
 
 const Wrap = styled.div`
@@ -18,6 +19,7 @@ const SetTimes = styled.ol`
   width: min-content;
   margin-left: auto;
   margin-right: auto;
+  font-family: monospace;
 
   li {
     text-align: left;
@@ -34,15 +36,10 @@ const Button = styled.button`
 
 const durationString = (from, to = moment(), short) => {
   const duration = moment.duration(to.diff(from));
-  return short
-    ? oneLineTrim`
-      ${duration.get('minutes')}:
-      ${duration.get('seconds')}.
-      ${duration.get('milliseconds')}`
-    : stripIndents`
-      ${duration.get('minutes')} minutes and
-      ${duration.get('seconds')}.${duration.get('milliseconds')} seconds
-    `;
+  const shortFormat = 'mm:ss.SSS';
+  const longFormat = 'mm [minutes] and ss.SSS [seconds]';
+
+  return duration.format(short ? shortFormat : longFormat, { trim: false });
 };
 
 function PuzzleComplete({ startTime, individualSetTimes }) {
