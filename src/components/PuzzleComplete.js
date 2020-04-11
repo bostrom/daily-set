@@ -37,7 +37,7 @@ const Button = styled.button`
 const durationString = (from, to = moment(), short) => {
   const duration = moment.duration(to.diff(from));
   const shortFormat = 'mm:ss.SSS';
-  const longFormat = 'mm [minutes] and ss.SSS [seconds]';
+  const longFormat = 'mm [minutes and] ss.SSS [seconds]';
 
   return duration.format(short ? shortFormat : longFormat, { trim: false });
 };
