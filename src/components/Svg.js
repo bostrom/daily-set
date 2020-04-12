@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { node, string } from 'prop-types';
 
 function Svg({ children, className }) {
@@ -25,4 +25,4 @@ Svg.defaultProps = {
   className: '',
 };
 
-export default Svg;
+export default memo(Svg);
