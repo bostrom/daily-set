@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { oneOf } from 'prop-types';
 
 const paths = {
@@ -73,4 +73,4 @@ Path.defaultProps = {
   color: 'red',
 };
 
-export default Path;
+export default memo(Path);
